@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Meridian Bank – Customer Analytics</title>
+<style>
+:root{--bg:#eaf0f9;--card:rgba(255,255,255,.86);--ink:#0f2342;--mut:#5b6b85;--line:#d7e1f0;--in:#fff;--navy:#0b1f4a;--blue:#2457d6;--cyan:#16b8d6;--teal:#12a594;--green:#2fb56a;--pur:#7b5bd6;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0a1220;--card:rgba(19,31,56,.88);--ink:#e8eefb;--mut:#9fb0cc;--line:#26385e;--in:#101c36}}
+:root[data-theme="dark"]{--bg:#0a1220;--card:rgba(19,31,56,.88);--ink:#e8eefb;--mut:#9fb0cc;--line:#26385e;--in:#101c36}
+*{box-sizing:border-box}html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font:14px/1.45 "Segoe UI",system-ui,-apple-system,Arial,sans-serif;background-color:var(--bg)}
+.app{display:grid;grid-template-columns:248px minmax(0,1fr);min-height:100vh}
+.side{position:sticky;top:0;height:100vh;padding:22px 14px;color:#fff;background:linear-gradient(180deg,rgba(7,20,52,.82),rgba(7,20,52,.97) 70%),var(--img) 38% 0/cover;display:flex;flex-direction:column;gap:6px}
+.logo{display:flex;gap:10px;align-items:center;padding:4px 8px 22px}
+.logo b{font-size:17px;letter-spacing:.2px;display:block}.logo small{color:#9db6e6;font-size:11.5px}
+.nav{display:flex;align-items:center;gap:12px;width:100%;padding:11px 12px;border:0;border-radius:12px;background:none;color:#c9d8f5;font:inherit;text-align:left;cursor:pointer}
+.nav svg{width:19px;height:19px;flex:none;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.nav:hover{background:rgba(255,255,255,.08)}.nav:focus-visible,select:focus-visible,input:focus-visible,button:focus-visible{outline:2px solid var(--cyan);outline-offset:2px}
+.nav.on{background:linear-gradient(90deg,#2457d6,#16b8d6);color:#fff;font-weight:600;box-shadow:0 6px 18px rgba(22,120,214,.45)}
+.sidenote{margin-top:auto;font-size:11.5px;color:#9db6e6;padding:10px;border:1px solid rgba(255,255,255,.14);border-radius:12px;background:rgba(255,255,255,.05)}
+.main{padding:0 24px 32px;min-width:0}
+.hdr{margin:0 -24px;padding:24px 24px 70px;color:#fff;background:linear-gradient(100deg,rgba(7,20,52,.93),rgba(20,70,160,.72)),var(--img) 50% 30%/cover;display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;align-items:flex-end}
+.hdr h1{margin:0;font-size:26px;font-weight:650;letter-spacing:.2px}.hdr p{margin:4px 0 0;color:#bcd0f3}
+.chip{background:rgba(255,255,255,.14);border:1px solid rgba(255,255,255,.25);padding:6px 12px;border-radius:99px;font-size:12px;backdrop-filter:blur(8px)}
+.filters{margin:-46px 0 16px;padding:14px;border-radius:18px;background:var(--card);backdrop-filter:blur(14px);border:1px solid var(--line);box-shadow:0 14px 34px rgba(11,31,74,.16);display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;align-items:end;position:relative}
+.filters label{display:block;font-size:11.5px;color:var(--mut);margin-bottom:3px}
+select,input[type=search]{width:100%;padding:8px 10px;border:1px solid var(--line);border-radius:10px;background:var(--in);color:var(--ink);font:inherit}
+.reset{padding:9px 12px;border:0;border-radius:10px;background:var(--navy);color:#fff;font:inherit;font-weight:600;cursor:pointer}
+.kpis{display:grid;grid-template-columns:repeat(auto-fit,minmax(168px,1fr));gap:14px;margin-bottom:16px}
+.kpi{padding:14px 16px;border-radius:16px;background:var(--card);border:1px solid var(--line);box-shadow:0 8px 22px rgba(11,31,74,.09);border-left:5px solid var(--c)}
+.kpi span{color:var(--mut);font-size:12.5px}.kpi b{display:block;font-size:24px;margin-top:2px;font-variant-numeric:tabular-nums}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(310px,1fr));gap:16px}
+.card{padding:16px;border-radius:18px;background:var(--card);backdrop-filter:blur(10px);border:1px solid var(--line);box-shadow:0 10px 26px rgba(11,31,74,.09);min-width:0}
+.card h3{margin:0 0 10px;font-size:14.5px}.cv{position:relative;height:250px}.w2{grid-column:span 2}
+.view{display:none}.view.on{display:block}.view.grid.on{display:grid}
+.tools{display:flex;gap:10px;justify-content:space-between;align-items:center;margin-bottom:10px;flex-wrap:wrap}.tools input{max-width:300px}
+.tw{overflow-x:auto}table{width:100%;border-collapse:collapse;min-width:760px}
+th,td{padding:9px 10px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font-size:12px;color:var(--mut);cursor:pointer;user-select:none}td.n{text-align:right;font-variant-numeric:tabular-nums}
+.pill{padding:2px 10px;border-radius:99px;font-size:12px;font-weight:600}
+.Low{background:#dff5e8;color:#17703d}.Medium{background:#fff1cf;color:#8a5a00}.High{background:#fde0e0;color:#a32525}
+.pg{display:flex;gap:8px;align-items:center;justify-content:flex-end;margin-top:10px;color:var(--mut)}.pg button{padding:6px 12px;border:1px solid var(--line);background:var(--in);color:var(--ink);border-radius:8px;cursor:pointer}
+@media (max-width:860px){.app{grid-template-columns:1fr}.side{position:static;height:auto;flex-direction:row;flex-wrap:wrap}.logo{padding-bottom:6px;width:100%}.nav{width:auto}.sidenote{display:none}.w2{grid-column:auto}.main{padding:0 14px 24px}.hdr{margin:0 -14px;padding:20px 14px 66px}}
+</style></head>
+<body><div class="app">
+<aside class="side" id="side">
+ <div class="logo"><svg width="38" height="38" viewBox="0 0 38 38"><defs><linearGradient id="lg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#16b8d6"/><stop offset="1" stop-color="#2457d6"/></linearGradient></defs><rect width="38" height="38" rx="10" fill="url(#lg)"/><path d="M9 28V14l10-5 10 5v14M14 28V17M19 28V17M24 28V17M8 28h22" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><div><b>Meridian Bank</b><small>Customer Analytics</small></div></div>
+ <div id="nav"></div>
+ <div class="sidenote"><span id="sm">Demo data: 800 synthetic customers.</span><button class="reset" id="ld" style="margin-top:8px;width:100%">Load your CSV</button><input type="file" id="fi" accept=".csv" hidden></div>
+</aside>
+<main class="main">
+ <header class="hdr"><div><h1 id="ttl">Executive Overview</h1><p>Customer base, deposits and credit risk at a glance</p></div><span class="chip" id="cnt"></span></header>
+ <section class="filters" id="flt"></section>
+ <section class="kpis" id="kp"></section>
+ <div id="views">
+  <div class="view grid on" id="v-ov"></div><div class="view grid" id="v-sg"></div><div class="view grid" id="v-fn"></div><div class="view grid" id="v-rk"></div>
+  <div class="view" id="v-ex"><div class="card"><div class="tools"><h3 style="margin:0">Customer records</h3><input type="search" id="q" placeholder="Search ID, city, segment…" aria-label="Search customers"><button class="reset" id="ex">Export filtered CSV</button></div><div class="tw"><table><thead id="th"></thead><tbody id="tb"></tbody></table></div><div class="pg"><span id="pi"></span><button id="pp">Previous</button><button id="pn">Next</button></div></div></div>
+ </div>
+</main></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+<script>
+const $=s=>document.querySelector(s);
+/* ---------- illustrated glass-tower skyline used as the sidebar/header background ---------- */
+(function(){let s=11;const r=()=>(s=(s*16807)%2147483647)/2147483647;
+let g='<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 800" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="a" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#16356e"/><stop offset="1" stop-color="#7db3de"/></linearGradient><linearGradient id="g" x1="0" x2="1"><stop offset="0" stop-color="#bfe3f7"/><stop offset=".5" stop-color="#3a78b8"/><stop offset="1" stop-color="#173f78"/></linearGradient><pattern id="w" width="12" height="16" patternUnits="userSpaceOnUse"><path d="M0 0H12M0 0V16" stroke="#fff" stroke-opacity=".3"/></pattern></defs><rect width="1200" height="800" fill="url(#a)"/>';
+for(let L=0;L<2;L++){let x=-20;while(x<1200){const w=60+r()*90,h=(L?260:180)+r()*(L?460:300);g+=`<g opacity="${L?1:.55}"><rect x="${x}" y="${800-h}" width="${w}" height="${h}" fill="url(#g)"/><rect x="${x}" y="${800-h}" width="${w}" height="${h}" fill="url(#w)"/><rect x="${x+w*.62}" y="${800-h}" width="${w*.08}" height="${h}" fill="#fff" opacity=".18"/></g>`;x+=w+(L?4:-10);}}
+g+='</svg>';document.documentElement.style.setProperty('--img',`url("data:image/svg+xml,${encodeURIComponent(g)}")`);})();
+/* ---------- demo data (replace this block with real rows of the same fields) ---------- */
+let sd=7;const rnd=()=>{sd|=0;sd=sd+0x6D2B79F5|0;let t=Math.imul(sd^sd>>>15,1|sd);t=t+Math.imul(t^t>>>7,61|t)^t;return((t^t>>>14)>>>0)/4294967296};
+const pick=(a,w)=>{let r=rnd()*w.reduce((x,y)=>x+y),i=0;while((r-=w[i])>=0)i++;return a[i]};
+const G={Delhi:['New Delhi','Dwarka'],Haryana:['Gurugram','Faridabad'],'Uttar Pradesh':['Noida','Lucknow'],Maharashtra:['Mumbai','Pune'],Karnataka:['Bengaluru','Mysuru'],'Tamil Nadu':['Chennai','Coimbatore']};
+const SEG=['Retail','Premium','Small Business','Corporate'],ACC=['Savings','Current','Salary','Fixed Deposit'],GEN=['Male','Female','Other'];
+const AGE=['18–25','26–35','36–45','46–60','60+'],INC=['Below ₹3L','₹3–6L','₹6–12L','₹12–25L','₹25L+'],RSK=['Low','Medium','High'];
+const ag=a=>a<26?AGE[0]:a<36?AGE[1]:a<46?AGE[2]:a<61?AGE[3]:AGE[4];
+const ib=i=>i<3e5?INC[0]:i<6e5?INC[1]:i<12e5?INC[2]:i<25e5?INC[3]:INC[4];
+const now=new Date(),t0=new Date(2022,0,1),D=[];
+for(let i=0;i<800;i++){const st=pick(Object.keys(G),[22,18,16,18,14,12]),seg=pick(SEG,[55,15,20,10]),age=Math.round(21+rnd()*45+rnd()*8),m={Retail:1,Premium:2.6,'Small Business':1.8,Corporate:3.2}[seg];
+ const inc=Math.round((2e5+rnd()*7e5)*m*(.6+age/70)/1e4)*1e4,acct=pick(ACC,[45,15,25,15]);
+ const bal=Math.round(inc*(.05+rnd()*.7)*(acct=='Fixed Deposit'?3:acct=='Current'?1.5:1)/100)*100;
+ const cs=Math.max(300,Math.min(900,Math.round(622+Math.log10(inc/1e5)*90+(rnd()-.5)*150))),risk=cs>=750?'Low':cs>=650?'Medium':'High';
+ const j=new Date(+t0+rnd()*(now-t0));
+ D.push({id:'C'+(10001+i),city:G[st][rnd()<.6?0:1],st,seg,age,ageG:ag(age),gen:pick(GEN,[52,46,2]),inc,incB:ib(inc),acct,bal,cs,risk,def:rnd()<{Low:.01,Medium:.04,High:.13}[risk],act:rnd()<.86,j,ym:j.getFullYear()+'-'+String(j.getMonth()+1).padStart(2,'0')});}
+/* ---------- helpers ---------- */
+const sm=(a,f)=>a.reduce((s,x)=>s+f(x),0),av=(a,f)=>a.length?sm(a,f)/a.length:0;
+const by=(r,k,ord)=>{const m={};r.forEach(x=>(m[x[k]]=m[x[k]]||[]).push(x));return(ord||Object.keys(m).sort()).map(k=>[k,m[k]||[]])};
+const inr=n=>n>=1e7?'₹'+(n/1e7).toFixed(2)+' Cr':n>=1e5?'₹'+(n/1e5).toFixed(1)+' L':'₹'+Math.round(n).toLocaleString('en-IN');
+const pc=n=>(n*100).toFixed(1)+'%';
+/* ---------- filters ---------- */
+const FL=[['t','Time period',[['all','All time'],['12','Last 12 months'],['6','Last 6 months'],['3','Last 3 months']],0],
+['geo','Region / State / City',null,0],['seg','Customer segment',SEG,'seg'],['ageG','Age group',AGE,'ageG'],['incB','Income band',INC,'incB'],['gen','Gender',GEN,'gen'],['acct','Account type',ACC,'acct'],['risk','Risk category',RSK,'risk']];
+function buildF(){$('#flt').innerHTML=FL.map(f=>{let o='<option value="">All</option>';
+ if(f[0]=='t')o=f[2].map(x=>`<option value="${x[0]}">${x[1]}</option>`).join('');
+ else if(f[0]=='geo')o+='<optgroup label="State">'+Object.keys(G).map(s=>`<option value="s:${s}">${s}</option>`).join('')+'</optgroup><optgroup label="City">'+Object.values(G).flat().sort().map(c=>`<option value="c:${c}">${c}</option>`).join('')+'</optgroup>';
+ else o+=f[2].map(x=>`<option>${x}</option>`).join('');
+ return `<div><label for="f-${f[0]}">${f[1]}</label><select id="f-${f[0]}">${o}</select></div>`}).join('')+'<button class="reset" id="rs">Reset filters</button>';}buildF();
+/* ---------- chart definitions: [view, title, type, fn(rows)->[labels,data], series label, wide] ---------- */
+const bins=[[300,549,'300–549'],[550,649,'550–649'],[650,699,'650–699'],[700,749,'700–749'],[750,799,'750–799'],[800,900,'800+']];
+const C=[
+['ov','New customers by month','line',r=>{const g=by(r,'ym');return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers','w2'],
+['ov','Customers by segment','doughnut',r=>{const g=by(r,'seg',SEG);return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers'],
+['ov','Deposits by state (₹ Cr)','hbar',r=>{const g=by(r,'st').sort((a,b)=>sm(b[1],x=>x.bal)-sm(a[1],x=>x.bal));return[g.map(a=>a[0]),g.map(a=>+(sm(a[1],x=>x.bal)/1e7).toFixed(2))]},'₹ Cr'],
+['ov','Account type mix','doughnut',r=>{const g=by(r,'acct',ACC);return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers'],
+['sg','Customers by age group','bar',r=>{const g=by(r,'ageG',AGE);return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers'],
+['sg','Customers by income band','bar',r=>{const g=by(r,'incB',INC);return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers'],
+['sg','Gender split','doughnut',r=>{const g=by(r,'gen',GEN);return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers'],
+['sg','Customers by account type','bar',r=>{const g=by(r,'acct',ACC);return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers'],
+['fn','Average balance by segment (₹ Lakh)','bar',r=>{const g=by(r,'seg',SEG);return[g.map(a=>a[0]),g.map(a=>+(av(a[1],x=>x.bal)/1e5).toFixed(2))]},'₹ Lakh'],
+['fn','Deposits by account type (₹ Cr)','bar',r=>{const g=by(r,'acct',ACC);return[g.map(a=>a[0]),g.map(a=>+(sm(a[1],x=>x.bal)/1e7).toFixed(2))]},'₹ Cr'],
+['fn','Average balance by income band (₹ Lakh)','line',r=>{const g=by(r,'incB',INC);return[g.map(a=>a[0]),g.map(a=>+(av(a[1],x=>x.bal)/1e5).toFixed(2))]},'₹ Lakh','w2'],
+['rk','Risk category mix','doughnut',r=>{const g=by(r,'risk',RSK);return[g.map(a=>a[0]),g.map(a=>a[1].length)]},'Customers'],
+['rk','Credit score distribution','bar',r=>[bins.map(b=>b[2]),bins.map(b=>r.filter(x=>x.cs>=b[0]&&x.cs<=b[1]).length)],'Customers'],
+['rk','Default rate by segment (%)','bar',r=>{const g=by(r,'seg',SEG);return[g.map(a=>a[0]),g.map(a=>+(av(a[1],x=>x.def?1:0)*100).toFixed(1))]},'Default %'],
+['rk','Average credit score by income band','line',r=>{const g=by(r,'incB',INC);return[g.map(a=>a[0]),g.map(a=>Math.round(av(a[1],x=>x.cs)))]},'Score']];
+const P=['#2457d6','#16b8d6','#12a594','#2fb56a','#7b5bd6','#0b1f4a'],st=getComputedStyle(document.documentElement);
+Chart.defaults.color=st.getPropertyValue('--mut').trim();Chart.defaults.borderColor=st.getPropertyValue('--line').trim();Chart.defaults.font.family='"Segoe UI",system-ui,Arial,sans-serif';
+const CH=C.map((c,i)=>{const d=document.createElement('div');d.className='card '+(c[5]||'');d.innerHTML=`<h3>${c[1]}</h3><div class="cv"><canvas></canvas></div>`;$('#v-'+c[0]).appendChild(d);
+ const dn=c[2]=='doughnut',ln=c[2]=='line',col=P[i%5];
+ return new Chart(d.querySelector('canvas'),{type:c[2]=='hbar'?'bar':c[2],data:{labels:[],datasets:[{label:c[4],data:[],backgroundColor:dn?P:ln?col+'33':col,borderColor:dn?'transparent':col,borderWidth:ln?2.5:0,fill:ln,tension:.3,pointRadius:ln?2:0,borderRadius:6}]},
+ options:{indexAxis:c[2]=='hbar'?'y':'x',maintainAspectRatio:false,cutout:'62%',plugins:{legend:{display:dn,position:'bottom'}},scales:dn?{}:{x:{grid:{display:false},ticks:{maxTicksLimit:12}},y:{beginAtZero:true}}}})});
+/* ---------- explorer table ---------- */
+const TC=[['id','Customer ID'],['city','City'],['st','State'],['seg','Segment'],['age','Age','n'],['gen','Gender'],['incB','Income band'],['acct','Account'],['bal','Balance','n'],['cs','Credit score','n'],['risk','Risk']];
+let tS={k:'bal',d:-1,p:0},R=[];
+$('#th').innerHTML='<tr>'+TC.map(c=>`<th data-k="${c[0]}" class="${c[2]||''}">${c[1]}</th>`).join('')+'</tr>';
+function table(){const q=$('#q').value.toLowerCase().trim();let r=R.filter(x=>!q||(x.id+x.city+x.seg+x.st+x.acct).toLowerCase().includes(q));
+ r.sort((a,b)=>(a[tS.k]>b[tS.k]?1:a[tS.k]<b[tS.k]?-1:0)*tS.d);const n=Math.ceil(r.length/12)||1;tS.p=Math.min(tS.p,n-1);
+ $('#tb').innerHTML=r.slice(tS.p*12,tS.p*12+12).map(x=>'<tr>'+TC.map(c=>{const v=x[c[0]];return c[0]=='risk'?`<td><span class="pill ${v}">${v}</span></td>`:`<td class="${c[2]||''}">${c[0]=='bal'?inr(v):v}</td>`}).join('')+'</tr>').join('')||'<tr><td colspan="11">No customers match these filters. Try Reset filters.</td></tr>';
+ $('#pi').textContent=`${r.length} customers · page ${tS.p+1} of ${n}`;$('#pp').disabled=tS.p==0;$('#pn').disabled=tS.p>=n-1}
+$('#th').onclick=e=>{const k=e.target.dataset.k;if(!k)return;tS.d=tS.k==k?-tS.d:1;tS.k=k;table()};
+$('#pp').onclick=()=>{tS.p--;table()};$('#pn').onclick=()=>{tS.p++;table()};$('#q').oninput=()=>{tS.p=0;table()};
+/* ---------- render ---------- */
+function render(){const v=id=>$('#f-'+id).value,geo=v('geo'),cut=new Date(now);if(v('t')!='all')cut.setMonth(cut.getMonth()-+v('t'));
+ R=D.filter(x=>(v('t')=='all'||x.j>=cut)&&(!geo||(geo[0]=='s'?x.st:x.city)==geo.slice(2))&&['seg','ageG','incB','gen','acct','risk'].every(k=>!v(k)||x[k]==v(k)));
+ const n=R.length,K=[['Customers',n.toLocaleString('en-IN'),P[0]],['Total deposits',inr(sm(R,x=>x.bal)),P[1]],['Average balance',inr(av(R,x=>x.bal)),P[2]],['Avg credit score',Math.round(av(R,x=>x.cs))||0,P[3]],['Active customers',pc(av(R,x=>x.act?1:0)),P[4]],['High-risk share',pc(av(R,x=>x.risk=='High'?1:0)),'#d64545']];
+ $('#kp').innerHTML=K.map(k=>`<div class="kpi" style="--c:${k[2]}"><span>${k[0]}</span><b>${k[1]}</b></div>`).join('');
+ $('#cnt').textContent=n+' of '+D.length+' customers shown';
+ C.forEach((c,i)=>{const[l,d]=c[3](R),h=CH[i];h.data.labels=l;h.data.datasets[0].data=d;h.update()});table()}
+$('#flt').onchange=render;$('#flt').onclick=e=>{if(e.target.id=='rs'){FL.forEach(f=>$('#f-'+f[0]).selectedIndex=0);render()}};
+/* ---------- load your own CSV / export ---------- */
+const csv=t=>{const r=[];let w=[],c='',q=false;for(let i=0;i<t.length;i++){const h=t[i];if(q){if(h=='"'){if(t[i+1]=='"'){c+='"';i++}else q=false}else c+=h}else if(h=='"')q=true;else if(h==','){w.push(c);c=''}else if(h=='\n'||h=='\r'){if(h=='\r'&&t[i+1]=='\n')i++;w.push(c);c='';if(w.length>1||w[0])r.push(w);w=[]}else c+=h}if(c||w.length){w.push(c);r.push(w)}return r};
+const msg=t=>$('#sm').textContent=t;
+function loadCSV(t,name){const rows=csv(t),h=rows[0].map(x=>x.trim().toLowerCase().replace(/[^a-z]/g,'')),ix=n=>h.indexOf(n),need=['customerid','city','state','segment','age','gender','annualincome','accounttype','balance','creditscore','joined'],miss=need.filter(n=>ix(n)<0);
+ if(miss.length)return msg('Missing columns: '+miss.join(', '));
+ const yes=v=>/^(1|y|yes|true)$/i.test((v||'').trim()),hd=ix('defaulted')>=0,ha=ix('active')>=0;
+ const out=rows.slice(1).map(r=>{const g=n=>(r[ix(n)]||'').trim(),age=+g('age'),inc=+g('annualincome'),cs=+g('creditscore'),bal=+g('balance'),j=new Date(g('joined'));
+  if(![age,inc,cs,bal].every(isFinite)||isNaN(j)||!g('customerid'))return null;
+  return{id:g('customerid'),city:g('city'),st:g('state'),seg:g('segment'),age,ageG:ag(age),gen:g('gender'),inc,incB:ib(inc),acct:g('accounttype'),bal,cs,risk:cs>=750?'Low':cs>=650?'Medium':'High',def:hd&&yes(r[ix('defaulted')]),act:ha?yes(r[ix('active')]):true,j,ym:j.getFullYear()+'-'+String(j.getMonth()+1).padStart(2,'0')}}).filter(Boolean);
+ if(!out.length)return msg('No valid rows found in '+name);
+ const u=k=>[...new Set(out.map(x=>x[k]))].sort();
+ SEG.splice(0,SEG.length,...u('seg'));ACC.splice(0,ACC.length,...u('acct'));GEN.splice(0,GEN.length,...u('gen'));
+ Object.keys(G).forEach(k=>delete G[k]);out.forEach(x=>{G[x.st]=G[x.st]||[];if(!G[x.st].includes(x.city))G[x.st].push(x.city)});
+ D.length=0;D.push(...out);buildF();tS.p=0;render();
+ msg('Loaded '+out.length+' rows from '+name+(hd&&ha?'':'. No Defaulted/Active column: default rate shows 0% and active share 100%.'))}
+$('#ld').onclick=()=>$('#fi').click();$('#fi').onchange=e=>{const f=e.target.files[0];if(f)f.text().then(t=>loadCSV(t,f.name))};
+$('#ex').onclick=()=>{const b=[TC.map(c=>c[1]).join(',')].concat(R.map(x=>TC.map(c=>JSON.stringify(x[c[0]]==null?'':x[c[0]])).join(',')));const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([b.join('\n')],{type:'text/csv'}));a.download='filtered_customers.csv';a.click()};
+/* ---------- navigation ---------- */
+const NAV=[['ov','Executive Overview','M3 3h7v7H3zM14 3h7v7h-7zM3 14h7v7H3zM14 14h7v7h-7z'],['sg','Customer Segmentation','M16 11a4 4 0 1 0-8 0 4 4 0 0 0 8 0zM4 21c0-4 3.6-6 8-6s8 2 8 6'],['fn','Financial Analysis','M3 17l5-6 4 4 8-9M3 21h18'],['rk','Risk & Credit Analysis','M12 3l8 3v6c0 5-3.5 8-8 9-4.5-1-8-4-8-9V6z'],['ex','Customer Data Explorer','M3 5h18v14H3zM3 10h18M9 5v14']];
+$('#nav').innerHTML=NAV.map((n,i)=>`<button class="nav${i?'':' on'}" data-v="${n[0]}"><svg viewBox="0 0 24 24"><path d="${n[2]}"/></svg>${n[1]}</button>`).join('');
+$('#nav').onclick=e=>{const b=e.target.closest('.nav');if(!b)return;document.querySelectorAll('.nav').forEach(x=>x.classList.toggle('on',x==b));
+ document.querySelectorAll('.view').forEach(x=>x.classList.toggle('on',x.id=='v-'+b.dataset.v));$('#ttl').textContent=NAV.find(n=>n[0]==b.dataset.v)[1];CH.forEach(c=>c.resize())};
+render();
+</script></body></html>
